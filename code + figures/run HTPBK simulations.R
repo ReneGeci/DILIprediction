@@ -1,5 +1,5 @@
 # set working directory to code directory
-setwd("C:/Users/User/OneDrive - Uniklinik RWTH Aachen/PhD/R model files/analysis/2024_06_14 Zeynep DILI/data/superdata v2/GitHub Repo/code + figures")
+setwd("XXX/code + figures")
 
 inSilicoCLModelFilesPath = "../model files/In silico clearance"
 inVivoCLModelFilesPath =  "../model files/In vivo clearance (if available)"

@@ -13,7 +13,7 @@ library(ggnewscale)
 # ensure working directory is set correctly
 # XXX/code + figures
 
-workingDirectory = "C:/Users/User/OneDrive - Uniklinik RWTH Aachen/PhD/R model files/analysis/2024_06_14 Zeynep DILI/data/superdata v2/GitHub Repo/code + figures"
+workingDirectory = "XXX/code + figures"
 
 knitr::opts_knit$set(root.dir = workingDirectory)
 
