@@ -7,7 +7,7 @@ Ahenk Zeynep Sayin,
 Stephan Schaller,
 Lars Kuepfer
 
-now available here: XXX
+now available on bioRxiv: XXX
 ___
 
 ## Overview
@@ -28,15 +28,15 @@ or [download a zip archive](https://github.com/ReneGeci/DILIprediction/archive/m
 
 
 ## Investigating the code
+A R markdown file containing the code that produces all publication figures can be investigated in `code + figures`.
 
-To run model simulations, you need to at least install the Open Systems pharmacology suite, its R package and all package dependencies required.
+To re-run model simulations, you need to at least install the Open Systems pharmacology suite, its R package and all package dependencies required.
 
 To learn more about the installation of the Open Systems Pharmacology suite (PK-Sim & MoBi) go to their [webpage](https://www.open-systems-pharmacology.org/).
 
-For an explanation how to install the OSP R package, go here [github](https://github.com/open-systems-pharmacology/ospsuite-r)
+For an explanation how to install the OSP R package, go here: [github](https://github.com/open-systems-pharmacology/ospsuite-r).
 
-For documentation and explanation how the OSP R package works, go here [webpage]
-https://www.open-systems-pharmacology.org/OSPSuite-R/).
+For documentation and explanation how the OSP R package works, go here [webpage](https://www.open-systems-pharmacology.org/OSPSuite-R/).
 
 
 ## Funding
