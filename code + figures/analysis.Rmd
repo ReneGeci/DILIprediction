@@ -1446,185 +1446,6 @@ ggsave("figures/Comparison Boxplot incl excl BSEP.pdf",  width = 85, height = 55
 ```
 
 
-#Ratio Comparison PODs
-
-```{r}
-m = TopInVivo %>%
-  ungroup() %>%
-  filter(!is.na(DILIConcern)) %>%
-  filter(!is.na(lowestPOD)) %>%
-  filter(!is.na(medianCmax)) %>%
-  filter(!DILIConcern %in% c("Ambiguous-DILI-concern")) %>%
-  # filter(!PODValueSources == "medianBSEPIC50;") %>%
-  arrange(RatioLowestPOD) %>%
-  mutate(rowID = row_number())
-
-sum(table(m$DILIConcern))
-table(m$DILIConcern)
-
-# Convert from wide to long
-m_long <- m %>%
-  pivot_longer(
-    cols = c("RatioCytoToxBase0_25", "RatioMitoToxBase0_25",
-             "RatioBSEPBase0_25"),      
-    names_to = "Variable",       
-    values_to = "Value"       
-  )
-```
-
-##Bars
-```{r}
-ggplot(m_long, aes(x = rowID, y = Value, fill = Variable)) +
-  # geom_col(position = position_dodge(width = 0.8)) +
-  geom_bar(stat = "identity", aes(fill = `DILIConcern`)) +
-  scale_fill_manual(values = c("Most-DILI-Concern" = "red",  "Clinical Dev" = "darkred", "Ambiguous-DILI-concern" = "orange", "Less-DILI-Concern" = "#FFEA00",  "No-DILI-Concern" = "#00E300"))  +
-  geom_hline(yintercept = 1) + scale_y_log10()
-
-
-ggplot(m_long, aes(x = factor(rowID), 
-                   y = Value, 
-                   fill = DILIConcern, 
-                   group = Variable)) +
-  geom_bar(
-    stat = "identity", 
-    position = position_dodge(width = 0.8)
-  ) +
-  scale_fill_manual(values = c("Most-DILI-Concern"   = "red",
-                               "Clinical Dev"        = "darkred",
-                               "Ambiguous-DILI-Concern" = "orange",
-                               "Less-DILI-Concern"   = "#FFEA00",
-                               "No-DILI-Concern"     = "#00E300")) +
-  geom_hline(yintercept = 1) +
-  scale_y_log10() +
-  labs(x = "ID", y = "Value") +   geom_text(
-    aes(label = Variable),
-    position = position_dodge(width = 0.8),
-    vjust = -0.3,    # move the text above the bar
-    size = 3         # adjust text size as needed
-  )  +
-  theme(axis.text.x = element_text(angle = 90))
-
-
-ggplot(m_long, aes(x = factor(rowID), 
-                   y = Value, 
-                   fill = DILIConcern, 
-                   group = Variable)) +
-  geom_bar(
-    stat = "identity", 
-    position = position_dodge(width = 0.8)
-  ) +
-  scale_fill_manual(values = c("Most-DILI-Concern"   = "red",
-                               "Clinical Dev"        = "darkred",
-                               "Ambiguous-DILI-Concern" = "orange",
-                               "Less-DILI-Concern"   = "#FFEA00",
-                               "No-DILI-Concern"     = "#00E300")) +
-  geom_hline(yintercept = 1) +
-  scale_y_log10() +
-  labs(x = "ID", y = "Value")  +
-  theme(axis.text.x = element_text(angle = 90))
-
-
-ggplot(m_long, 
-       aes(x = factor(rowID), 
-           y = Value, 
-           fill = DILIConcern, 
-           group = Variable)) +
-  geom_bar(
-    stat = "identity", 
-    position = position_dodge(width = 0.8)
-  ) +
-  # Add the variable name on each bar:
-  geom_text(
-    aes(label = Variable),
-    position = position_dodge(width = 0.8),
-    vjust = -0.3,    # move the text slightly above the bar
-    size = 3         # adjust text size as needed
-  ) +
-  scale_fill_manual(values = c("Most-DILI-Concern"     = "red",
-                               "Clinical Dev"          = "darkred",
-                               "Ambiguous-DILI-Concern"= "orange",
-                               "Less-DILI-Concern"     = "#FFEA00",
-                               "No-DILI-Concern"       = "#00E300")) +
-  geom_hline(yintercept = 1) + 
-  scale_y_log10() +
-  labs(x = "ID", y = "Value") +
-  theme(axis.text.x = element_text(angle = 90))
-
-
-ggplot(m_long, 
-       aes(x = factor(rowID), 
-           y = Value, 
-           fill = DILIConcern)) +
-  geom_bar(stat = "identity", position = position_dodge()) +
-  scale_fill_manual(values = c("Most-DILI-Concern"     = "red",
-                               "Clinical Dev"          = "darkred",
-                               "Ambiguous-DILI-Concern"= "orange",
-                               "Less-DILI-Concern"     = "#FFEA00",
-                               "No-DILI-Concern"       = "#00E300")) +
-  geom_hline(yintercept = 1) + 
-  scale_y_log10() +
-  labs(x = "ID", y = "Value") +
-  facet_wrap(~Variable, ncol = 1)  +
-  theme(axis.text.x = element_text(angle = 45))+
-  scale_x_discrete(
-    breaks = m_long$rowID[seq(1, length(m_long$rowID), by = 10*3)]  # every 10th label
-  )
-
-
-ggsave("figures/mechanismsPerCompounds A.png", dpi = 600, width = 10, height = 5)
-
-
-ggplot(m_long, aes(x = factor(rowID), y = Value, fill = DILIConcern, group = Variable)) +
-  geom_bar(
-    stat = "identity",
-    position = position_dodge2(
-      width = 0.8,         # how much bars within a group dodge each other
-      preserve = "single", # keep each ID at a single x-position
-      padding = 0.2        # extra space between groups
-    )
-  ) +
-  labs(x = "rowID", y = "Value")+
-  scale_fill_manual(values = c("Most-DILI-Concern"     = "red",
-                               "Clinical Dev"          = "darkred",
-                               "Ambiguous-DILI-Concern"= "orange",
-                               "Less-DILI-Concern"     = "#FFEA00",
-                               "No-DILI-Concern"       = "#00E300")) +
-  geom_hline(yintercept = 1) + 
-  scale_y_log10() +
-  theme(axis.text.x = element_text(angle = 45)) +
-  scale_x_discrete(
-    breaks = m_long$rowID[seq(1, length(m_long$rowID), by = 10*3)]  # every 10th label
-  )
-
-
-ggsave("figures/mechanismsPerCompounds B.png", dpi = 600, width = 10, height = 5)
-
-```
-
-
-```{r}
-df <- tibble(
-  ID = c(1, 2, 3),
-  Var1 = c(23.3, 15.2, 18.5),
-  Var2 = c(19, 12, 16),
-  Var3 = c(9, 6, 5)
-)
-
-# Convert from wide to long
-df_long <- df %>%
-  pivot_longer(
-    cols = starts_with("Var"),      # columns Var1, Var2, Var3
-    names_to = "Variable",          # new name for variable column
-    values_to = "Value"             # new name for value column
-  )
-
-# Make grouped bar plot
-ggplot(df_long, aes(x = factor(ID), y = Value, fill = Variable)) +
-  geom_col(position = position_dodge(width = 0.8)) +
-  labs(x = "ID", y = "Value", fill = "Variable") +
-  theme_minimal()
-```
-
 #Ratio: BSEP (Obs Cmax)
 ```{r}
 c = TopInVivo %>%
@@ -1856,11 +1677,6 @@ ggsave("figures/boxplot Ratio BSEP with cholestasisIntegrated.pdf",  width = 180
 
 
 ```{r}
-ggplot(c, aes(x = rowID, y = RatioLowestnonBSEPPODBase0_25)) + geom_bar(stat = "identity", aes(fill = `DILIConcern`)) +
-  scale_fill_manual(values = c("Most-DILI-Concern" = "red",  "Clinical Dev" = "darkred", "Ambiguous-DILI-concern" = "orange", "Less-DILI-Concern" = "#FFEA00",  "No-DILI-Concern" = "#00E300"))  +
-  geom_hline(yintercept = 1) + scale_y_log10()
-
-
 c3 = c %>%
   arrange(RatioLowestPODBase0_25) %>%
   filter(!is.na(RatioLowestnonBSEPPODBase0_25)) %>%
@@ -2198,22 +2014,6 @@ ggplot(c, aes(x = medianBSEPIC50 , y = medianCmax)) + geom_point( aes(colour = `
 ggplot(c, aes(x = rowID, y = RatioBSEP)) + geom_bar(stat = "identity", aes(fill = expertDILIPattern)) +
   scale_fill_manual(values = c("cholestatic" = "blue",  "Clinical Dev" = "#FFEA00", "hepatocellular" = "orange", "unknown" = "grey", "safe" = "#00E300"))  +
   geom_hline(yintercept = 1) + scale_y_log10()
-
-ggplot(c, aes(x = rowID, y = RatioBSEP)) + geom_bar(stat = "identity", aes(fill = UniToxanyCholestasis)) +
-  geom_hline(yintercept = 1)+ scale_y_log10() +
-  scale_fill_manual(values = c("TRUE" = "red"))
-
-ggplot(c, aes(x = rowID, y = RatioBSEP)) + geom_bar(stat = "identity", aes(fill = UniToxCholestasis)) +
-  geom_hline(yintercept = 1)+ scale_y_log10()+
-  scale_fill_manual(values = c("TRUE" = "red"))
-
-ggplot(c, aes(x = rowID, y = RatioBSEP)) + geom_bar(stat = "identity", aes(fill = UniToxJaundice)) +
-  geom_hline(yintercept = 1)+ scale_y_log10() +
-  scale_fill_manual(values = c("TRUE" = "red"))
-
-ggplot(c, aes(x = rowID, y = RatioBSEP)) + geom_bar(stat = "identity", aes(fill = UniToxPruritus)) +
-  geom_hline(yintercept = 1)+ scale_y_log10()+
-  scale_fill_manual(values = c("TRUE" = "red"))
 
 
 h = c %>%
@@ -2797,22 +2597,6 @@ ggplot(f, aes(x = rowID, y = RatioPredBSEP)) + geom_bar(stat = "identity", aes(f
   scale_fill_manual(values = c("cholestatic" = "blue",  "hepatocellular" = "orange",
                                "Clinical Dev" = "#FFEA00", "safe" = "#00E300"))  +
   geom_hline(yintercept = 1)+ scale_y_log10()
-
-ggplot(f, aes(x = rowID, y = RatioPredBSEP)) + geom_bar(stat = "identity", aes(fill = UniToxanyCholestasis)) +
-  geom_hline(yintercept = 1)+ scale_y_log10() +
-  scale_fill_manual(values = c("TRUE" = "red"))
-
-ggplot(f, aes(x = rowID, y = RatioPredBSEP)) + geom_bar(stat = "identity", aes(fill = UniToxCholestasis)) +
-  geom_hline(yintercept = 1)+ scale_y_log10()+
-  scale_fill_manual(values = c("TRUE" = "red"))
-
-ggplot(f, aes(x = rowID, y = RatioPredBSEP)) + geom_bar(stat = "identity", aes(fill = UniToxJaundice)) +
-  geom_hline(yintercept = 1)+ scale_y_log10() +
-  scale_fill_manual(values = c("TRUE" = "red"))
-
-ggplot(f, aes(x = rowID, y = RatioPredBSEP)) + geom_bar(stat = "identity", aes(fill = UniToxPruritus)) +
-  geom_hline(yintercept = 1)+ scale_y_log10()+
-  scale_fill_manual(values = c("TRUE" = "red"))
 
 ```
 
@@ -3634,22 +3418,6 @@ ggplot(f, aes(x = rowID, y = RatioPredBSEP)) + geom_bar(stat = "identity", aes(f
   scale_fill_manual(values = c("cholestatic" = "blue",  "hepatocellular" = "orange",
                                "Clinical Dev" = "#FFEA00", "safe" = "#00E300"))  +
   geom_hline(yintercept = 1)+ scale_y_log10()
-
-ggplot(f, aes(x = rowID, y = RatioPredBSEP)) + geom_bar(stat = "identity", aes(fill = UniToxanyCholestasis)) +
-  geom_hline(yintercept = 1)+ scale_y_log10() +
-  scale_fill_manual(values = c("TRUE" = "red"))
-
-ggplot(f, aes(x = rowID, y = RatioPredBSEP)) + geom_bar(stat = "identity", aes(fill = UniToxCholestasis)) +
-  geom_hline(yintercept = 1)+ scale_y_log10()+
-  scale_fill_manual(values = c("TRUE" = "red"))
-
-ggplot(f, aes(x = rowID, y = RatioPredBSEP)) + geom_bar(stat = "identity", aes(fill = UniToxJaundice)) +
-  geom_hline(yintercept = 1)+ scale_y_log10() +
-  scale_fill_manual(values = c("TRUE" = "red"))
-
-ggplot(f, aes(x = rowID, y = RatioPredBSEP)) + geom_bar(stat = "identity", aes(fill = UniToxPruritus)) +
-  geom_hline(yintercept = 1)+ scale_y_log10()+
-  scale_fill_manual(values = c("TRUE" = "red"))
 
 ```
 
