@@ -28,9 +28,9 @@ or [download a zip archive](https://github.com/ReneGeci/DILIprediction/archive/m
 
 
 ## Investigating the code
-A R markdown file containing the code that produces all publication figures can be investigated in `code + figures`.
+A R markdown file containing the code that produces all publication figures can be found in `code + figures`. The corresponding .html file also shows the direct code outputs like plots.
 
-To re-run model simulations, you need to at least install the Open Systems pharmacology suite, its R package and all package dependencies required.
+To re-run PBK and PBBA model simulations, you need to at least install the Open Systems pharmacology suite, its R package and all package dependencies required.
 
 To learn more about the installation of the Open Systems Pharmacology suite (PK-Sim & MoBi) go to the [OSP webpage](https://www.open-systems-pharmacology.org/).
 
