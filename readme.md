@@ -7,7 +7,7 @@ Ahenk Zeynep Sayin,
 Stephan Schaller,
 Lars Kuepfer
 
-now available on bioRxiv: XXX
+now available in Archives of Toxicology: https://doi.org/10.1007/s00204-026-04305-2
 ___
 
 ## Overview
